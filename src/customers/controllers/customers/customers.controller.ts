@@ -19,7 +19,7 @@ export class CustomersController {
     return this.customerService.getCustomers();
   }
 
-  @Get('id/:id')
+  @Get(':id')
   findCustomersById(@Param('id', ParseIntPipe) id: number) {
     return this.customerService.findCustomersById(id);
   }

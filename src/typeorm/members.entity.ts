@@ -1,14 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Food } from './food.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('users')
-export class Users {
+@Entity('members')
+export class Members {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'user_id',
+    name: 'member_id',
   })
   id: number;
-
+  
   @Column({
     nullable: false,
     default: '',
@@ -23,10 +22,18 @@ export class Users {
   name: string;
 
   @Column({
+    name: 'email',
     nullable: false,
     default: '',
   })
   email: string;
+
+  @Column({
+    name: 'gender',
+    nullable: false,
+    default: '',
+  })
+  gender: string;
 
   @Column({
     name: 'phone',
@@ -40,7 +47,4 @@ export class Users {
     default: '',
   })
   password: string;
-
-  // @OneToMany(() => Food , food => food.id)
-  // food : Food[]
 }

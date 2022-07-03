@@ -1,7 +1,10 @@
 import { Customer } from "./customer.entity";
-import { User } from "./user.entity";
+import { Food } from "./food.entity";
+import { Members } from "./members.entity";
+import { Orders } from "./orders.entity";
+import { Users } from "./user.entity";
 
-const entities = [User, Customer];
+const entities = [Users, Customer, Food, Members,Orders];
 
-export {User, Customer};
+export {Users, Customer, Food, Members, Orders};
 export default entities;
