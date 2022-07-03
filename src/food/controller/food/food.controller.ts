@@ -14,12 +14,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express'
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateFoodDto, QueryFoodDto } from 'src/food/dto/createFood.dto';
 import { FoodService } from 'src/food/service/food/food.service';
 import { multerConfig } from 'src/food/multer.config';
-
+import { classToPlain } from 'class-transformer';
 
 @ApiTags('FOOD')
 @Controller('food')
@@ -27,15 +27,17 @@ export class FoodController {
   constructor(private readonly foodService: FoodService) {}
   @Post('create')
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors( FileInterceptor('image', multerConfig(2 * 1024 * 1024, 'image')),)
+  @UseInterceptors(
+    FileInterceptor('image', multerConfig(2 * 1024 * 1024, 'image')),
+  )
   @UsePipes(ValidationPipe)
   createFood(@Body() createFoodDto: CreateFoodDto, @UploadedFile() image: any) {
-    return this.foodService.createFood(createFoodDto,image.path);
+    return this.foodService.createFood(createFoodDto, image.path);
   }
 
   @Get()
-  getFoods(@Query() body : QueryFoodDto) {
-    return this.foodService.getFoods(body);
+  async getFoods(@Query() body: QueryFoodDto) {
+    return await classToPlain(this.foodService.getFoods(body), { groups: [] });
   }
 
   @Get(':id')
@@ -45,8 +47,11 @@ export class FoodController {
 
   @Patch('update/:id')
   @HttpCode(200)
-  updateEmployee(@Param('id', ParseIntPipe) id: number, @Body() createFoodDto: CreateFoodDto) {
-    this.foodService.update(id,createFoodDto);
+  updateEmployee(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createFoodDto: CreateFoodDto,
+  ) {
+    this.foodService.update(id, createFoodDto);
   }
 
   @Delete('delete/:id')

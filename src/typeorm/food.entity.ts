@@ -11,7 +11,7 @@ import { Users } from './user.entity';
 import { Expose } from 'class-transformer';
 
 const configService = new ConfigService();
-const siteUrl = configService.get<string>('APP_SITE_URL', 'localhost');
+const siteUrl = configService.get<string>('APP_SITE_URL', 'localhost:3000');
 
 @Entity('foods')
 export class Food {
@@ -62,7 +62,7 @@ export class Food {
   @ManyToMany(() => Orders, (order) => order.food)
   order?: Orders[];
 
-  @Expose()
+  @Expose({ groups: [], name: 'url' })
   getUrl() {
     const url = `${siteUrl}${
       this.image.slice(0, 6) === 'bucket'
